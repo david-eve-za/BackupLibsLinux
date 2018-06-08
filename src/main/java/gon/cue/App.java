@@ -12,20 +12,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
-
-
-
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 
-/**
- * Hello world!
- *
- */
+
 public class App {
 
     private static Logger log = Logger.getLogger(App.class.getName());
@@ -40,12 +33,18 @@ public class App {
 
         log.info("Start App");
 
-        findDependency(toBackup, "/projects/MegaManager/sdk/bindings/java/.libs/libmegajava.so.0.0.0");
+        findDependency(toBackup, "/projects/sdk/bindings/java/.libs/libmegajava.so");
+
+        String[] spl = "/projects/sdk/bindings/java/.libs/libmegajava.so".split("/");
+        if (!toBackup.containsKey(spl[spl.length - 1])) {
+            toBackup.put(spl[spl.length - 1], "/projects/sdk/bindings/java/.libs/libmegajava.so");
+        }
 
         toBackup.forEach((k, v) -> {
             try {
-                log.info("Copy file to: "+new File(System.getProperty("user.dir")+"/libs/"+k).getAbsolutePath());
-                Files.copy(new File(v).toPath(), new File(System.getProperty("user.dir")+"/libs/"+k).toPath(), StandardCopyOption.REPLACE_EXISTING);
+                log.info("Copy file to: " + new File(System.getProperty("user.dir") + "/libs/" + k).getAbsolutePath());
+                Files.copy(new File(v).toPath(), new File(System.getProperty("user.dir") + "/libs/" + k).toPath(),
+                           StandardCopyOption.REPLACE_EXISTING);
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
